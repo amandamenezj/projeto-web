@@ -25,7 +25,7 @@ def curso():
     <h2 style='color:pink'> Gestão da Tecnologia da Informação!! </h2>
     <p style='color:deeppink'> Quarto semestre - Programação para Internet </p>
     '''
-# f diz que o texto vai ser formatado para que receba variáveis
+# f diz que o texto vai ser formatado para que receba variáveis. F = FORMATAR
 @app.route('/var')
 def variavel():
     palavra = 'Amanda'
@@ -64,6 +64,7 @@ def gatinho():
 
        '''
 
+# CAIRÁ NA PROVA IF E ELSE
 @app.route('/calcular/<nome>/<int:ano>') 
 def calcular(nome, ano):
    ano_atual = datetime.now().year
@@ -78,7 +79,25 @@ def calcular(nome, ano):
                            nascimento = ano, idade = idade, status = status) 
    
 
-    
+# AULA 04 - continuação da aula anterior!
+
+@app.route('/dicio')
+def dicionario():
+    dados = {
+        'chave' : 'valor',
+        'curso' : 'GTI',
+        'local' : 'Fatec Jahu',
+        'semestre' : 4, 
+    }
+    return render_template('dicio.html', **dados)
+# os dois asteriscos avisam pro codigo desempacotar toda a chave com as variavéis para o outro lado
+ 
+# Atividade 1
+
+@app.route('/condicao/<int:numero>')
+def condicao(numero):
+    return render_template('condicao.html', numero = numero)
+
 # O pedaço de código a seguir tem que ser sempre a ultima coisa do código!
 
 if __name__ == '__main__':
