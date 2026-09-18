@@ -1,4 +1,4 @@
-from flask import Flask, render_template 
+from flask import Flask, render_template, request, redirect, url_for
 from datetime import datetime
 
 app = Flask(__name__)
@@ -97,6 +97,78 @@ def dicionario():
 @app.route('/condicao/<int:numero>')
 def condicao(numero):
     return render_template('condicao.html', numero = numero)
+
+@app.route('/perfil/<nome>')
+def perfil(nome):
+    # Simulando um banco de dados com um dicionário de usuários
+    # Na Aula 05 isso virá do MySQL de verdade
+    usuarios = {
+        'admin': {
+            'nome': 'Administrador',
+            'email': 'admin@fatec.br',
+            'nivel': 'administrador',
+            'ativo': True,
+            'posts': 47
+        },
+        'joao': {
+            'nome': 'João Silva',
+            'email': 'joao@email.com',
+            'nivel': 'usuario',
+            'ativo': True,
+            'posts': 12
+        },
+        'maria': {
+            'nome': 'Maria Souza',
+            'email': 'maria@email.com',
+            'nivel': 'moderador',
+            'ativo': False,
+            'posts': 31
+        }
+    }
+
+    # Busca o usuário pelo nome na URL — .get() retorna None se não existir
+    usuario = usuarios.get(nome)
+
+    # Passa o usuário (ou None) para o template
+    return render_template('perfil.html', usuario=usuario, nome_buscado=nome)
+
+# AULA 05 - Projeto de formulário, nosso trabalho deverá conter 5 desses!
+
+@app.route('/formulario',  methods=['GET', 'POST'])
+def formulario():
+
+    if request.method == 'POST':
+            nome = request.form.get('nome', 'Nada enviado')
+            num1 = int(request.form['numero1'])
+            num2 = float(request.form['numero2'])
+
+            soma = num1 + num2
+            sub = num1 - num2
+            mult = num1 * num2
+            div = num1 / num2
+
+# redirecionando para outra rota
+# url_for chama a função, não a rota
+
+            return redirect(url_for ('exibir_resultado',
+                                        nome = nome, soma = soma,
+                                        sub = sub, mult = mult,
+                                        div = div))
+
+    return render_template('formulario.html')
+
+@app.route('/exibir')   
+def exibir_resultado():
+
+    nome = request.args.get('nome')
+    soma = request.args.get('soma')
+    sub = request.args.get('sub')
+    mult = request.args.get('mult')
+    div = request.args.get('div')
+
+    return render_template('exibir.html', nome = nome, soma = soma,
+                                sub = sub, mult = mult, div = div)
+
 
 # O pedaço de código a seguir tem que ser sempre a ultima coisa do código!
 
